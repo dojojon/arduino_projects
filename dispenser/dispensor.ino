@@ -14,10 +14,10 @@ const int FILL_ECHO_PIN = 13;
 const int FILL_LED_PIN = 6;
 
 // Distance in CM to start dispensing
-const int DISPENSE_DISTANCE = 20;
+const int DISPENSE_DISTANCE = 10;
 
 // Distance in CM to indicate low paper
-const int FILL_LEVEL_LOW_DISTANCE = 25;
+const int FILL_LEVEL_LOW_DISTANCE = 10;
 
 // Time in milliseconds dispense started
 unsigned long dispenseStartTime = 0;
@@ -38,15 +38,18 @@ void setup()
 {
   //Serial Port begin
   Serial.begin(9600);
+  Serial.println('Setup start');
 
   //Define inputs and outputs
   pinMode(DISPENSE_TRIG_PIN, OUTPUT);
+  pinMode(DISPENSE_ECHO_PIN, INPUT);
   pinMode(DISPENSE_MOTOR_PIN, OUTPUT);
-  pinMode(DISPENSE_ECHO_PIN, OUTPUT);
 
   pinMode(FILL_TRIG_PIN, OUTPUT);
   pinMode(FILL_ECHO_PIN, INPUT);
   pinMode(FILL_LED_PIN, OUTPUT);
+
+  Serial.println('Setup complete');
 }
 
 void loop()
@@ -93,7 +96,7 @@ void loop()
   // Get the fill level distance
   cmFill = getDistance(FILL_TRIG_PIN, FILL_ECHO_PIN);
   Serial.print(cmFill);
-  Serial.print("cmFill");
+  Serial.print(" cmFill");
   Serial.println();
 
   // If the distance is lower than required level, turn on warning led
