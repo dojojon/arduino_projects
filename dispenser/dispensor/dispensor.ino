@@ -2,19 +2,19 @@
 
 const int DISPENSE_TRIG_PIN = 3;
 const int DISPENSE_ECHO_PIN = 4;
-const int DISPENSE_ADJUST_PIN = A5;
-const int DISPENSE_DURATION_ADJUST_PIN = A4;
+const int DISPENSE_ADJUST_PIN = A2;
+const int DISPENSE_DURATION_ADJUST_PIN = A1;
 
 //Dispense Motor Pi
-const int DISPENSE_MOTOR_PIN = 10;
+const int DISPENSE_MOTOR_PIN = 9;
 
 // Distance in CM to start dispensing
 const int DISPENSE_DISTANCE_MAX = 60;
-long dispenseDistance = DISPENSE_DISTANCE_MAX;
+long dispenseDistance = DISPENSE_DISTANCE_MAX / 2;
 
 // How long in milliseconds to dispense paper. e.g.  10000 is 10 seconds
 const int DISPENSE_DURATION_MAX = 10000;
-long dispenseDuration = DISPENSE_DURATION_MAX;
+long dispenseDuration = DISPENSE_DURATION_MAX / 2;
 
 // State of motor, HIGH its running, LOW its off
 int dispenseMotorState = LOW;
@@ -22,14 +22,14 @@ int dispenseMotorState = LOW;
 // Fill Level Pins
 const int FILL_TRIG_PIN = 5;
 const int FILL_ECHO_PIN = 6;
-const int FILL_ADJUST_PIN = A4;
+const int FILL_ADJUST_PIN = A0;
 
 // Low Paper Pin
-const int FILL_LED_PIN = 11;
+const int FILL_LED_PIN = 8;
 
 // Distance in CM to indicate low paper
 const int FILL_LEVEL_DISTANCE_MAX = 60;
-long fillDistance = FILL_LEVEL_DISTANCE_MAX;
+long fillDistance = FILL_LEVEL_DISTANCE_MAX / 2;
 
 // Time dispense started
 long dispenseStartTime = 0;
@@ -58,27 +58,37 @@ void setup()
   Serial.println("Setup complete");
 }
 
+
+int c = 0;
 void loop()
 {
 
+  c++;
+  Serial.println(c);
+
   // Recalculate the dispense, duration and fill levels
+  // using the analog pins
   updateLevels();
 
   // Check the hand sensor and motor states
-  //   upateDispensorState();
+  upateDispensorState();
 
   // Check the paper levels
   updateFillState();
 
+  //testOutputPins();
+
   delay(500);
 }
 
+
+// Check for hand and control the motor pin
 void upateDispensorState()
 {
   Serial.println("------------");
   // Serial.print("dispenseMotorState ");
   // Serial.println(dispenseMotorState);
-  
+
   cmDispense = getDistance(DISPENSE_TRIG_PIN, DISPENSE_ECHO_PIN);
   Serial.print("cmDispense ");
   Serial.println(cmDispense);
@@ -117,9 +127,7 @@ void upateDispensorState()
     {
 
       Serial.println("Switch off the motor");
-      Serial.println("Switch off the motor");
-      Serial.println("Switch off the motor");
-
+    
       // Turn the motor on
       dispenseMotorState = LOW;
       digitalWrite(DISPENSE_MOTOR_PIN, dispenseMotorState);
@@ -178,6 +186,7 @@ void updateLevels()
     Serial.print("fillAdjust     ");
     Serial.println(fillAdjust);
 
+    Serial.println("");
     Serial.print("dispenseDistance ");
     Serial.println(dispenseDistance);
 
@@ -189,11 +198,13 @@ void updateLevels()
   }
 }
 
+
+// Check the paper level and turn on led if low
 void updateFillState()
 {
 
- Serial.println("------------");
- 
+  Serial.println("------------");
+
   // Get the fill level distance
   cmFill = getDistance(FILL_TRIG_PIN, FILL_ECHO_PIN);
   Serial.print("cmFill ");
@@ -214,4 +225,22 @@ void updateFillState()
     Serial.println("Paper above level");
     digitalWrite(FILL_LED_PIN, LOW);
   }
+}
+
+
+//Test of motor and fill level pins
+void testOutputPins() {
+
+  digitalWrite(DISPENSE_MOTOR_PIN, HIGH);
+  delay(150);
+
+  digitalWrite(DISPENSE_MOTOR_PIN, LOW);
+  delay(150);
+
+  digitalWrite(FILL_LED_PIN, HIGH);
+  delay(150);
+
+  digitalWrite(FILL_LED_PIN, LOW);
+  delay(150);
+
 }
