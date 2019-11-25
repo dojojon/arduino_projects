@@ -1,5 +1,4 @@
 // Dispense Sensor Pins
-
 const int DISPENSE_TRIG_PIN = 3;
 const int DISPENSE_ECHO_PIN = 4;
 const int DISPENSE_ADJUST_PIN = A2;
@@ -68,17 +67,17 @@ void loop()
 
   // Recalculate the dispense, duration and fill levels
   // using the analog pins
-  updateLevels();
+   updateLevels();
 
   // Check the hand sensor and motor states
-  upateDispensorState();
+   upateDispensorState();
 
   // Check the paper levels
-  updateFillState();
+   updateFillState();
 
-  //testOutputPins();
+  // testOutputPins();
 
-  delay(500);
+  delay(250);
 }
 
 
@@ -114,20 +113,20 @@ void upateDispensorState()
   }
   else
   {
-    // Serial.println("Motor running");
-    // Serial.print("dispenseStartTime ");
-    // Serial.println(dispenseStartTime);
-    // Serial.print("dispenseDuration ");
-    // Serial.println(dispenseDuration);
-    // Serial.print("millis ");
-    // Serial.println(millis());
+     Serial.println("Motor running");
+     Serial.print("dispenseStartTime ");
+     Serial.println(dispenseStartTime);
+     Serial.print("dispenseDuration ");
+     Serial.println(dispenseDuration);
+     Serial.print("millis ");
+     Serial.println(millis());
 
     // Motor is running, check the start + duration < now to see if we need to stop it
     if (dispenseStartTime + dispenseDuration < millis())
     {
 
       Serial.println("Switch off the motor");
-    
+
       // Turn the motor on
       dispenseMotorState = LOW;
       digitalWrite(DISPENSE_MOTOR_PIN, dispenseMotorState);
@@ -214,8 +213,8 @@ void updateFillState()
   Serial.print("fillDistance ");
   Serial.println(fillDistance);
 
-  // If the distance is lower than required level, turn on warning led
-  if (cmFill < fillDistance)
+  // If the distance is bigger than required level, turn on warning led
+  if (cmFill > fillDistance)
   {
     Serial.println("Low paper");
     digitalWrite(FILL_LED_PIN, HIGH);
@@ -231,16 +230,14 @@ void updateFillState()
 //Test of motor and fill level pins
 void testOutputPins() {
 
-  digitalWrite(DISPENSE_MOTOR_PIN, HIGH);
-  delay(150);
+    digitalWrite(DISPENSE_MOTOR_PIN, HIGH);
+    delay(150);
 
-  digitalWrite(DISPENSE_MOTOR_PIN, LOW);
-  delay(150);
+    digitalWrite(DISPENSE_MOTOR_PIN, LOW);
+    
+    digitalWrite(FILL_LED_PIN, HIGH);
+    delay(150);
 
-  digitalWrite(FILL_LED_PIN, HIGH);
-  delay(150);
-
-  digitalWrite(FILL_LED_PIN, LOW);
-  delay(150);
-
+    digitalWrite(FILL_LED_PIN, LOW);
+  
 }
