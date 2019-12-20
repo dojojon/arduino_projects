@@ -67,15 +67,15 @@ void loop()
 
   // Recalculate the dispense, duration and fill levels
   // using the analog pins
-   updateLevels();
+  updateLevels();
 
   // Check the hand sensor and motor states
-   upateDispensorState();
+  upateDispensorState();
 
   // Check the paper levels
-   updateFillState();
+  updateFillState();
 
-  // testOutputPins();
+  //testOutputPins();
 
   delay(250);
 }
@@ -113,13 +113,13 @@ void upateDispensorState()
   }
   else
   {
-     Serial.println("Motor running");
-     Serial.print("dispenseStartTime ");
-     Serial.println(dispenseStartTime);
-     Serial.print("dispenseDuration ");
-     Serial.println(dispenseDuration);
-     Serial.print("millis ");
-     Serial.println(millis());
+    Serial.println("Motor running");
+    Serial.print("dispenseStartTime ");
+    Serial.println(dispenseStartTime);
+    Serial.print("dispenseDuration ");
+    Serial.println(dispenseDuration);
+    Serial.print("millis ");
+    Serial.println(millis());
 
     // Motor is running, check the start + duration < now to see if we need to stop it
     if (dispenseStartTime + dispenseDuration < millis())
@@ -170,31 +170,29 @@ void updateLevels()
   dispenseDuration = map(dispenseDurationAdjust, 0, 1023, 1, DISPENSE_DURATION_MAX);
   fillDistance = map(fillAdjust, 0, 1023, 1, FILL_LEVEL_DISTANCE_MAX);
 
-  if (1 == 2)
-  {
 
-    Serial.println("------------------------------------");
+  Serial.println("------------------------------------");
 
-    Serial.println();
-    Serial.print("dispenseAdjust ");
-    Serial.println(dispenseAdjust);
+  Serial.println();
+  Serial.print("dispenseAdjust ");
+  Serial.println(dispenseAdjust);
 
-    Serial.print("dispenseDurationAdjust ");
-    Serial.println(dispenseDurationAdjust);
+  Serial.print("dispenseDurationAdjust ");
+  Serial.println(dispenseDurationAdjust);
 
-    Serial.print("fillAdjust     ");
-    Serial.println(fillAdjust);
+  Serial.print("fillAdjust     ");
+  Serial.println(fillAdjust);
 
-    Serial.println("");
-    Serial.print("dispenseDistance ");
-    Serial.println(dispenseDistance);
+  Serial.println("");
+  Serial.print("dispenseDistance ");
+  Serial.println(dispenseDistance);
 
-    Serial.print("dispenseDuration ");
-    Serial.println(dispenseDuration);
+  Serial.print("dispenseDuration ");
+  Serial.println(dispenseDuration);
 
-    Serial.print("fillDistance ");
-    Serial.println(fillDistance);
-  }
+  Serial.print("fillDistance ");
+  Serial.println(fillDistance);
+
 }
 
 
@@ -230,14 +228,14 @@ void updateFillState()
 //Test of motor and fill level pins
 void testOutputPins() {
 
-    digitalWrite(DISPENSE_MOTOR_PIN, HIGH);
-    delay(150);
+  digitalWrite(DISPENSE_MOTOR_PIN, HIGH);
+  delay(150);
 
-    digitalWrite(DISPENSE_MOTOR_PIN, LOW);
-    
-    digitalWrite(FILL_LED_PIN, HIGH);
-    delay(150);
+  digitalWrite(DISPENSE_MOTOR_PIN, LOW);
 
-    digitalWrite(FILL_LED_PIN, LOW);
-  
+  digitalWrite(FILL_LED_PIN, HIGH);
+  delay(150);
+
+  digitalWrite(FILL_LED_PIN, LOW);
+
 }
