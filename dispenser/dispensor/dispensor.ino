@@ -3,6 +3,7 @@ const int DISPENSE_TRIG_PIN = 3;
 const int DISPENSE_ECHO_PIN = 4;
 const int DISPENSE_ADJUST_PIN = A2;
 const int DISPENSE_DURATION_ADJUST_PIN = A1;
+const int DISPENSE_MOTOR_PWM = 100;
 
 //Dispense Motor Pi
 const int DISPENSE_MOTOR_PIN = 9;
@@ -11,8 +12,8 @@ const int DISPENSE_MOTOR_PIN = 9;
 const int DISPENSE_DISTANCE_MAX = 60;
 long dispenseDistance = DISPENSE_DISTANCE_MAX / 2;
 
-// How long in milliseconds to dispense paper. e.g.  10000 is 10 seconds
-const int DISPENSE_DURATION_MAX = 10000;
+// How long in milliseconds to dispense paper. e.g.  3000 is 3 seconds
+const int DISPENSE_DURATION_MAX = 3000;
 long dispenseDuration = DISPENSE_DURATION_MAX / 2;
 
 // State of motor, HIGH its running, LOW its off
@@ -75,7 +76,7 @@ void loop()
   // Check the paper levels
   updateFillState();
 
-  //testOutputPins();
+//  testOutputPins();
 
   delay(250);
 }
@@ -108,7 +109,8 @@ void upateDispensorState()
 
       // Turn the motor on
       dispenseMotorState = HIGH;
-      digitalWrite(DISPENSE_MOTOR_PIN, dispenseMotorState);
+      analogWrite(DISPENSE_MOTOR_PIN, DISPENSE_MOTOR_PWM);
+      
     }
   }
   else
@@ -167,7 +169,7 @@ void updateLevels()
   int fillAdjust = analogRead(FILL_ADJUST_PIN);
 
   dispenseDistance = map(dispenseAdjust, 0, 1023, 1, DISPENSE_DISTANCE_MAX);
-  dispenseDuration = map(dispenseDurationAdjust, 0, 1023, 1, DISPENSE_DURATION_MAX);
+  dispenseDuration = map(dispenseDurationAdjust, 0, 1023, 100, DISPENSE_DURATION_MAX);
   fillDistance = map(fillAdjust, 0, 1023, 1, FILL_LEVEL_DISTANCE_MAX);
 
 
@@ -228,14 +230,22 @@ void updateFillState()
 //Test of motor and fill level pins
 void testOutputPins() {
 
-  digitalWrite(DISPENSE_MOTOR_PIN, HIGH);
-  delay(150);
+  // Turn on motor
+  analogWrite(DISPENSE_MOTOR_PIN, DISPENSE_MOTOR_PWM);
+  
+  // Wait some milliseconds
+  delay(500);
 
-  digitalWrite(DISPENSE_MOTOR_PIN, LOW);
+  // Turn off motor
+  analogWrite(DISPENSE_MOTOR_PIN, LOW);
 
+  // Turn on light
   digitalWrite(FILL_LED_PIN, HIGH);
-  delay(150);
 
+  // Wait 5 seconds
+  delay(5000);
+
+  // Turn off light
   digitalWrite(FILL_LED_PIN, LOW);
 
 }
